@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="km" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="kds-ui" content="1.13.0">
+  <title>V_Heang Studio · English → Khmer Dubbing</title>
+  <meta name="description" content="Dub YouTube or uploaded videos from English, Chinese or Korean into Khmer with Srey Mom and Piseth voices.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#090d1a">
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="V_Heang">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c6cff'/%3E%3Cstop offset='1' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cg stroke='white' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M16 28v8M24 20v24M32 14v36M40 22v20M48 28v8'/%3E%3C/g%3E%3C/svg%3E">
+  <script>try { if (localStorage.getItem('kds_side') === '1') document.documentElement.classList.add('side-collapsed'); } catch (e) { /* no storage */ }</script>
+  <link rel="stylesheet" href="/static/css/app.css?v={{v}}">
+</head>
+<body>
+<!--KDS_BANNER-->
+<div class="app">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><i data-icon="logo"></i></div>
+      <div class="brand-name">V_Heang Studio<small data-i18n="app.tagline"></small></div>
+    </div>
+    <nav class="nav" id="nav">
+      <button data-page="dub" class="active"><i data-icon="dub"></i><span class="lbl" data-i18n="nav.dub"></span></button>
+      <button data-page="tts"><i data-icon="mic"></i><span class="lbl" data-i18n="nav.tts"></span></button>
+      <button data-page="terms"><i data-icon="terms"></i><span class="lbl" data-i18n="nav.terms"></span></button>
+      <button data-page="history"><i data-icon="history"></i><span class="lbl" data-i18n="nav.history"></span><span class="badge hidden" id="hist-badge"></span></button>
+      <button data-page="settings"><i data-icon="settings"></i><span class="lbl" data-i18n="nav.settings"></span></button>
+    </nav>
+    <div class="nav side-install hidden" id="install-box">
+      <button type="button" id="btn-install" aria-controls="install-help" aria-expanded="false"><i data-icon="install"></i><span class="lbl" data-i18n="pwa.install"></span></button>
+      <p class="side-install-help hidden" id="install-help" data-i18n="pwa.help"></p>
+    </div>
+    <div class="side-foot" id="sys-status"></div>
+    <div class="side-ver" title="server / UI files">V_Heang v{{ver}} · UI <span id="ui-ver">?</span></div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main class="main">
+    <header class="topbar">
+      <button class="pill-btn icon-only" id="side-toggle" type="button" aria-controls="sidebar" aria-expanded="true"><i data-icon="panel"></i></button>
+      <div class="titles">
+        <h1 id="page-title"></h1>
+        <p id="page-sub"></p>
+      </div>
+      <div class="tools">
+        <div class="lang-switch" id="lang-switch" role="group" aria-label="Language">
+          <button data-lang="km">ខ្មែរ</button><button data-lang="en">EN</button>
+        </div>
+        <button class="pill-btn" id="theme-btn" aria-label="Theme"><i data-icon="moon"></i></button>
+      </div>
+    </header>
+
+    <!-- ============ DUBBING STUDIO ============ -->
+    <section class="page active" id="page-dub">
+      <div class="stack">
+
+        <!-- 1 · Source -->
+        <div class="card" id="card-source">
+          <div class="card-head">
+            <span class="step-badge">1</span>
+            <h2 data-i18n="src.title"></h2>
+            <div class="tabs" id="src-tabs">
+              <button class="active" data-tab="youtube"><i data-icon="youtube"></i>YouTube Link</button>
+              <button data-tab="upload"><i data-icon="upload"></i><span data-i18n="src.tab.upload"></span></button>
+              <button data-tab="transcript"><i data-icon="doc"></i><span data-i18n="src.tab.transcript"></span></button>
+            </div>
+          </div>
+
+          <div class="row lang-row" id="src-lang-row">
+            <span class="label" data-i18n="src.lang"></span>
+            <div class="seg" id="src-lang" data-bind="source.lang" role="group">
+              <button type="button" data-value="auto" data-i18n="src.lang.auto"></button>
+              <button type="button" data-value="en" lang="en">English</button>
+              <button type="button" data-value="zh" lang="zh-Hans">中文</button>
+              <button type="button" data-value="ko" lang="ko">한국어</button>
+            </div>
+          </div>
+
+          <div id="src-youtube">
+            <div class="row">
+              <div class="input-wrap">
+                <i data-icon="youtube"></i>
+                <input class="input" id="yt-url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.youtube.com/watch?v=…">
+                <button class="btn btn-sm btn-ghost paste" id="btn-paste" type="button"><i data-icon="paste"></i><span data-i18n="btn.paste"></span></button>
+              </div>
+              <button class="btn btn-primary" id="btn-check" type="button"><i data-icon="search"></i><span data-i18n="btn.check"></span></button>
+            </div>
+            <p class="hint" data-i18n="src.hint"></p>
+            <div id="video-box"></div>
+          </div>
+
+          <div id="src-upload" class="hidden">
+            <label class="dropzone" id="up-drop" tabindex="0" role="button" aria-describedby="up-formats">
+              <input type="file" id="up-file" accept="video/*,audio/*,.mp4,.m4v,.mov,.mkv,.webm,.avi,.flv,.wmv,.ts,.mts,.m2ts,.mpg,.mpeg,.3gp,.ogv,.mp3,.wav,.m4a,.aac,.ogg,.opus,.flac,.wma,.aiff,.aif">
+              <i data-icon="upload"></i>
+              <b data-i18n="up.drop"></b>
+              <span id="up-formats" data-i18n="up.formats"></span>
+            </label>
+            <div id="up-box"></div>
+            <details class="up-subs" id="up-subs">
+              <summary data-i18n="up.subs.title"></summary>
+              <div class="up-subs-body">
+                <textarea class="input" id="up-text" rows="7" spellcheck="false" data-i18n-ph="up.subs.ph"></textarea>
+                <div class="row" style="margin-top:12px">
+                  <label class="btn btn-sm file-btn"><input type="file" id="up-subfile" accept=".srt,.vtt,.txt,text/plain"><i data-icon="upload"></i><span data-i18n="src.tr.upload"></span></label>
+                  <button class="btn btn-sm btn-ghost" id="up-subclear" type="button"><i data-icon="x"></i><span data-i18n="up.clear"></span></button>
+                  <span class="spacer"></span>
+                  <span class="counter" id="up-count"></span>
+                </div>
+                <p class="hint" data-i18n="up.subs.hint"></p>
+              </div>
+            </details>
+          </div>
+
+          <div id="src-transcript" class="hidden">
+            <textarea class="input" id="tr-text" rows="9" spellcheck="false" data-i18n-ph="src.tr.ph"></textarea>
+            <div class="row" style="margin-top:12px">
+              <label class="btn btn-sm file-btn"><input type="file" id="tr-file" accept=".srt,.vtt,.txt,text/plain"><i data-icon="upload"></i><span data-i18n="src.tr.upload"></span></label>
+              <input class="input" id="tr-title" style="max-width:320px;height:36px" data-i18n-ph="src.tr.title">
+              <span class="spacer"></span>
+              <span class="counter" id="tr-count"></span>
+            </div>
+            <p class="hint" data-i18n="src.tr.hint"></p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- 2 · Voice -->
+          <div class="card">
+            <div class="card-head"><span class="step-badge">2</span><h2 data-i18n="voice.title"></h2></div>
+            <div class="voice-block"></div>
+            <div class="divider"></div>
+            <div class="autovoice-block"></div>
+          </div>
+
+          <!-- 3 · Translation & terms -->
+          <div class="card" id="card-translate">
+            <div class="card-head"><span class="step-badge">3</span><h2 data-i18n="tr.title"></h2></div>
+            <div class="field">
+              <label data-i18n="tr.engine"></label>
+              <div class="seg block" data-bind="translate.engine">
+                <button data-value="google" data-i18n="tr.engine.google"></button>
+                <button data-value="llm" data-i18n="tr.engine.llm"></button>
+              </div>
+              <div class="notice warn hidden" data-llm-warn><i data-icon="alert"></i><div class="n-body"><span data-i18n="tr.llm.missing"></span> <a href="#settings" data-goto="settings" data-i18n="tr.llm.open"></a></div></div>
+            </div>
+            <div class="field-row manual-row" id="manual-row"><div class="txt"><b data-i18n="tr.manual"></b><span data-i18n="tr.manual.desc"></span></div><label class="switch"><input type="checkbox" data-bind="translate.manual"><i></i></label></div>
+            <p class="hint hidden" id="manual-hint" data-i18n="tr.manual.how"></p>
+            <div class="divider"></div>
+            <div class="terms-opts"></div>
+          </div>
+        </div>
+
+        <!-- 4 · Output -->
+        <div class="card">
+          <div class="card-head"><span class="step-badge">4</span><h2 data-i18n="out.title"></h2></div>
+          <div class="grid-2">
+            <div class="field">
+              <label data-i18n="out.sync"></label>
+              <div class="seg block" data-bind="output.sync">
+                <button data-value="fit" data-i18n="out.sync.fit"></button>
+                <button data-value="natural" data-i18n="out.sync.natural"></button>
+              </div>
+              <span class="hint" style="margin:0" data-i18n="out.sync.hint"></span>
+            </div>
+            <div class="field">
+              <label data-i18n="out.format"></label>
+              <div class="seg block" data-bind="output.format">
+                <button data-value="audio" data-i18n="out.format.audio"></button>
+                <button data-value="video" data-i18n="out.format.video"></button>
+              </div>
+              <div class="range-row hidden" id="orig-vol-row" style="margin-top:6px">
+                <span class="label" data-i18n="out.orig"></span>
+                <output data-out="output.orig_volume" data-fmt="pct0"></output>
+                <input type="range" min="0" max="60" step="5" data-bind="output.orig_volume">
+              </div>
+              <div class="field-row hidden" id="duck-row" style="margin-top:12px;padding:12px 0 0">
+                <div class="txt"><b data-i18n="out.duck"></b><span data-i18n="out.duck.desc"></span></div>
+                <label class="switch"><input type="checkbox" data-bind="output.duck"><i></i></label>
+              </div>
+              <div class="field hidden" id="vq-row" style="margin-top:12px">
+                <label data-i18n="out.quality"></label>
+                <div class="seg block" data-bind="output.max_height">
+                  <button data-value="1080">1080p</button>
+                  <button data-value="720">720p</button>
+                </div>
+              </div>
+              <div class="field hidden" id="frame-row" style="margin-top:12px">
+                <label data-i18n="out.shape"></label>
+                <div data-frame-controls="step4"></div>
+              </div>
+              <div class="field hidden" id="hs-row" style="margin-top:12px">
+                <div data-hs-controls="step4"></div>
+              </div>
+              <span class="hint hidden" id="video-hint" style="margin:0"></span>
+            </div>
+          </div>
+          <div class="row" style="margin-top:24px">
+            <button class="btn btn-primary btn-lg" id="btn-generate" type="button"><i data-icon="wand"></i><span data-i18n="btn.generate"></span></button>
+            <button class="btn btn-lg hidden" id="btn-cancel" type="button"><i data-icon="stop"></i><span data-i18n="btn.cancel"></span></button>
+            <span class="hint" style="margin:0" id="gen-hint"></span>
+          </div>
+        </div>
+
+        <div id="dub-progress" class="card hidden"></div>
+        <div id="dub-result" class="card hidden"></div>
+      </div>
+    </section>
+
+    <!-- ============ TEXT TO SPEECH ============ -->
+    <section class="page" id="page-tts">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <span class="step-badge">1</span>
+            <h2 data-i18n="tts.text"></h2>
+            <div class="seg" data-bind="tts.input_lang">
+              <button data-value="km" data-i18n="tts.mode.km"></button>
+              <button data-value="en" data-i18n="tts.mode.en"></button>
+              <button data-value="zh" data-i18n="tts.mode.zh"></button>
+              <button data-value="ko" data-i18n="tts.mode.ko"></button>
+            </div>
+          </div>
+          <textarea class="input" id="tts-text" rows="9" spellcheck="false" data-i18n-ph="tts.ph" style="min-height:200px"></textarea>
+          <div class="row" style="margin-top:12px">
+            <button class="btn btn-sm" id="tts-sample" type="button"><i data-icon="sparkle"></i><span data-i18n="tts.sample"></span></button>
+            <button class="btn btn-sm btn-ghost" id="tts-paste" type="button"><i data-icon="paste"></i><span data-i18n="btn.paste"></span></button>
+            <button class="btn btn-sm btn-ghost" id="tts-clear" type="button"><i data-icon="x"></i><span data-i18n="btn.clear"></span></button>
+            <span class="spacer"></span>
+            <span class="counter" id="tts-count"></span>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><span class="step-badge">2</span><h2 data-i18n="voice.title"></h2></div>
+            <div class="voice-block"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="step-badge">3</span><h2 data-i18n="tts.opts"></h2></div>
+            <div class="terms-opts"></div>
+            <div id="tts-engine-box" class="hidden">
+              <div class="divider"></div>
+              <div class="field">
+                <label data-i18n="tr.engine"></label>
+                <div class="seg block" data-bind="translate.engine">
+                  <button data-value="google" data-i18n="tr.engine.google"></button>
+                  <button data-value="llm" data-i18n="tr.engine.llm"></button>
+                </div>
+                <div class="notice warn hidden" data-llm-warn><i data-icon="alert"></i><div class="n-body"><span data-i18n="tr.llm.missing"></span> <a href="#settings" data-goto="settings" data-i18n="tr.llm.open"></a></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <button class="btn btn-primary btn-lg" id="tts-generate" type="button"><i data-icon="mic"></i><span data-i18n="tts.generate"></span></button>
+          <button class="btn btn-lg hidden" id="tts-cancel" type="button"><i data-icon="stop"></i><span data-i18n="btn.cancel"></span></button>
+        </div>
+        <div id="tts-progress" class="card hidden"></div>
+        <div id="tts-result" class="card hidden"></div>
+      </div>
+    </section>
+
+    <!-- ============ TECHNICAL TERMS ============ -->
+    <section class="page" id="page-terms">
+      <div class="stack">
+        <div class="card">
+          <div class="card-head">
+            <h2 data-i18n="terms.title"></h2>
+            <span class="chip accent" id="terms-count"></span>
+          </div>
+          <div class="notice info" style="margin-bottom:16px"><i data-icon="info"></i><div class="n-body"><span data-i18n="terms.help"></span></div></div>
+          <textarea class="input terms-editor" id="terms-editor" spellcheck="false" wrap="off"></textarea>
+          <div class="row" style="margin-top:14px">
+            <button class="btn btn-primary" id="terms-save" type="button"><i data-icon="save"></i><span data-i18n="btn.save"></span></button>
+            <button class="btn" id="terms-reset" type="button"><i data-icon="reset"></i><span data-i18n="terms.reset"></span></button>
+            <button class="btn btn-ghost" id="terms-export" type="button"><i data-icon="download"></i><span data-i18n="terms.export"></span></button>
+            <label class="btn btn-ghost file-btn"><input type="file" id="terms-import" accept=".txt,text/plain"><i data-icon="upload"></i><span data-i18n="terms.import"></span></label>
+            <span class="spacer"></span>
+            <span class="muted small" id="terms-state"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HISTORY ============ -->
+    <section class="page" id="page-history">
+      <div class="stack">
+        <div class="row">
+          <span class="muted" id="hist-count"></span>
+          <span class="spacer"></span>
+          <button class="btn btn-sm" id="hist-refresh" type="button"><i data-icon="reset"></i><span data-i18n="btn.refresh"></span></button>
+        </div>
+        <div id="hist-list"></div>
+      </div>
+    </section>
+
+    <!-- ============ SETTINGS ============ -->
+    <section class="page" id="page-settings">
+      <div class="stack">
+        <div class="card" id="card-vox">
+          <div class="card-head"><span class="step-badge plain"><i data-icon="chip"></i></span><h2 data-i18n="set.vox"></h2><span class="chip" id="vox-chip"></span></div>
+          <div id="vox-hw-warn"></div>
+          <p class="small muted" id="vox-speed" style="margin:10px 0 0"></p>
+          <div class="row" style="margin-top:16px;flex-wrap:wrap">
+            <button class="btn btn-primary" id="vox-install" type="button"><i data-icon="download"></i><span data-i18n="set.vox.install"></span></button>
+            <button class="btn" id="vox-start" type="button"><i data-icon="play"></i><span data-i18n="set.vox.start"></span></button>
+            <button class="btn" id="vox-stop" type="button"><i data-icon="stop"></i><span data-i18n="set.vox.stop"></span></button>
+            <button class="btn" id="vox-test" type="button"><i data-icon="sparkle"></i><span data-i18n="set.vox.test"></span></button>
+            <button class="btn btn-sm btn-ghost" id="vox-reinstall" type="button"><i data-icon="reset"></i><span data-i18n="set.vox.reinstall"></span></button>
+          </div>
+          <div class="small" id="vox-msg" style="margin-top:10px"></div>
+          <audio id="vox-test-audio" controls class="hidden" style="width:100%;margin-top:10px"></audio>
+          <div id="vox-install-box" class="hidden" style="margin-top:16px"></div>
+          <div class="field" style="max-width:360px;margin-top:18px"><label data-i18n="set.vox.device"></label>
+            <select class="select" id="vox-device"><option value="auto" data-i18n="set.vox.device.auto"></option><option value="cpu" data-i18n="set.vox.device.cpu"></option></select></div>
+          <div class="field-row hidden" id="vox-turbo-row" style="max-width:660px;margin-top:20px;padding:0;border-top:0">
+            <div class="txt"><b data-i18n="set.vox.turbo"></b><span data-i18n="set.vox.turbo.desc"></span><span class="small" id="vox-turbo-state" style="margin-top:6px"></span></div>
+            <label class="switch"><input type="checkbox" id="vox-turbo"><i></i></label>
+          </div>
+          <details id="vox-log-box" style="margin-top:6px"><summary data-i18n="set.vox.log"></summary><pre class="logbox" id="vox-log"></pre></details>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="step-badge plain"><i data-icon="globe"></i></span><h2 data-i18n="set.gt"></h2></div>
+          <p class="muted small" style="margin-bottom:14px" data-i18n="set.gt.desc"></p>
+          <div class="row">
+            <button class="btn" id="gt-test" type="button"><i data-icon="plug"></i><span data-i18n="set.gt.test"></span></button>
+            <span class="small" id="gt-test-summary"></span>
+          </div>
+          <div id="gt-test-result"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="step-badge plain"><i data-icon="sparkle"></i></span><h2 data-i18n="set.llm"></h2></div>
+          <p class="muted small" style="margin-bottom:16px" data-i18n="set.llm.desc"></p>
+          <div class="grid-2">
+            <div class="field"><label data-i18n="set.provider"></label>
+              <select class="select" id="llm-preset">
+                <option value="openai">OpenAI</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="openrouter">OpenRouter</option>
+                <option value="groq">Groq</option>
+                <option value="custom">Custom (OpenAI-compatible)</option>
+              </select></div>
+            <div class="field"><label data-i18n="set.model"></label><input class="input" data-bind="translate.llm.model" placeholder="gpt-4o-mini"></div>
+            <div class="field"><label>Base URL</label><input class="input mono" data-bind="translate.llm.base_url" placeholder="https://api.openai.com/v1"></div>
+            <div class="field"><label>API Key</label><input class="input mono" type="password" autocomplete="off" data-bind="translate.llm.api_key" placeholder="sk-…"></div>
+          </div>
+          <p class="hint hidden" id="llm-gemini-hint" data-i18n="set.llm.gemini.hint"></p>
+          <div class="row" style="margin-top:16px">
+            <button class="btn" id="llm-test" type="button"><i data-icon="plug"></i><span data-i18n="set.test"></span></button>
+            <span class="small" id="llm-test-result"></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="step-badge plain"><i data-icon="youtube"></i></span><h2>YouTube</h2></div>
+          <div class="grid-2">
+            <div class="field"><label data-i18n="set.cookies"></label>
+              <select class="select" data-bind="youtube.cookies_browser">
+                <option value="" data-i18n="set.cookies.none"></option>
+                <option value="chrome">Chrome</option><option value="edge">Microsoft Edge</option><option value="firefox">Firefox</option>
+                <option value="brave">Brave</option><option value="opera">Opera</option><option value="vivaldi">Vivaldi</option><option value="safari">Safari</option>
+              </select>
+              <span class="hint" style="margin:0" data-i18n="set.cookies.hint"></span></div>
+            <div class="field"><label>Proxy (optional)</label><input class="input mono" data-bind="youtube.proxy" placeholder="http://user:pass@host:port">
+              <span class="hint" style="margin:0" data-i18n="set.proxy.hint"></span></div>
+          </div>
+          <div class="divider"></div>
+          <div class="field-row"><div class="txt"><b data-i18n="set.whisper"></b><span data-i18n="set.whisper.desc"></span></div><label class="switch"><input type="checkbox" data-bind="youtube.whisper"><i></i></label></div>
+          <div class="field" style="max-width:440px;margin-top:6px"><label data-i18n="set.whisper.model"></label>
+            <select class="select" data-bind="youtube.whisper_model"><option value="tiny">tiny (fastest)</option><option value="base">base (recommended)</option><option value="small">small (more accurate)</option><option value="medium">medium (best · 中文 / 한국어 · slow)</option></select>
+            <span class="hint" style="margin:0" data-i18n="set.whisper.hint"></span></div>
+          <div id="whisper-box" data-whisper-box></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="step-badge plain"><i data-icon="mic"></i></span><h2 data-i18n="set.audio"></h2></div>
+          <div class="range-row" style="max-width:520px">
+            <span class="label" data-i18n="set.maxspeed"></span>
+            <output data-out="output.max_speedup" data-fmt="x"></output>
+            <input type="range" min="1" max="1.8" step="0.05" data-bind="output.max_speedup">
+          </div>
+          <p class="hint" data-i18n="set.maxspeed.hint"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- shared templates -->
+<template id="tpl-voice">
+  <div class="engine-switch">
+    <div class="seg block" data-bind="voice.engine">
+      <button data-value="edge" data-i18n="voice.engine.edge"></button>
+      <button data-value="voxcpm" data-i18n="voice.engine.vox"></button>
+    </div>
+    <p class="hint" style="margin:8px 0 0" data-engine-hint></p>
+  </div>
+
+  <!-- Microsoft Edge voices -->
+  <div class="engine-edge" style="margin-top:18px">
+    <div class="voice-picker" role="radiogroup"></div>
+    <div class="sliders">
+      <div class="range-row"><span class="label" data-i18n="voice.speed"></span><output data-out="voice.rate" data-fmt="pct"></output><input type="range" min="-50" max="100" step="5" data-bind="voice.rate"></div>
+      <div class="range-row"><span class="label" data-i18n="voice.pitch"></span><output data-out="voice.pitch" data-fmt="hz"></output><input type="range" min="-20" max="20" step="1" data-bind="voice.pitch"></div>
+      <div class="range-row"><span class="label" data-i18n="voice.volume"></span><output data-out="voice.volume" data-fmt="pct"></output><input type="range" min="-50" max="50" step="5" data-bind="voice.volume"></div>
+      <div class="row end"><button class="btn btn-sm btn-ghost" data-action="reset-voice" type="button"><i data-icon="reset"></i><span data-i18n="btn.reset"></span></button></div>
+    </div>
+  </div>
+
+  <!-- VoxCPM2 (local): voice cloning -->
+  <div class="engine-vox hidden" style="margin-top:18px">
+    <div class="vox-banner"></div>
+    <div class="vox-groups"></div>
+    <div class="row vox-add-row" style="margin-top:14px;gap:12px">
+      <label class="btn btn-sm file-btn"><input type="file" multiple accept="audio/*,video/*,.wav,.mp3,.m4a,.ogg,.flac,.mp4,.webm" data-vox-upload><i data-icon="upload"></i><span data-i18n="vox.add"></span></label>
+      <span class="hint" style="margin:0" data-i18n="vox.add.hint"></span>
+    </div>
+    <div class="vox-upload-status hidden" data-vox-upload-status role="status" aria-live="polite"></div>
+    <div class="vox-original-opts hidden field" style="margin-top:14px">
+      <label data-i18n="vox.refstart"></label>
+      <input class="input" style="max-width:240px" inputmode="decimal" autocomplete="off" data-bind="voice.vox.ref_start" data-i18n-ph="vox.refstart.ph">
+      <span class="hint" style="margin:0" data-i18n="vox.refstart.hint"></span>
+    </div>
+    <div class="vox-consent hidden" style="margin-top:14px">
+      <label class="check"><input type="checkbox" data-bind="voice.vox.consent"><span data-i18n="vox.consent"></span></label>
+      <span class="hint" style="margin:2px 0 0 28px" data-i18n="vox.consent.hint"></span>
+    </div>
+    <div class="sliders">
+      <div class="field"><label data-i18n="vox.quality"></label>
+        <div class="seg block" data-bind="voice.vox.quality">
+          <button data-value="fast" data-i18n="vox.quality.fast"></button>
+          <button data-value="balanced" data-i18n="vox.quality.balanced"></button>
+          <button data-value="high" data-i18n="vox.quality.high"></button>
+        </div>
+        <span class="hint vox-quality-hint" style="margin:6px 0 0"></span></div>
+      <div class="range-row"><span class="label" data-i18n="voice.speed"></span><output data-out="voice.rate" data-fmt="pct"></output><input type="range" min="-50" max="100" step="5" data-bind="voice.rate"></div>
+      <div class="range-row"><span class="label" data-i18n="voice.volume"></span><output data-out="voice.volume" data-fmt="pct"></output><input type="range" min="-50" max="50" step="5" data-bind="voice.volume"></div>
+      <div class="row end"><button class="btn btn-sm btn-ghost" data-action="reset-voice" type="button"><i data-icon="reset"></i><span data-i18n="btn.reset"></span></button></div>
+    </div>
+  </div>
+</template>
+
+<!-- voices by character (Dubbing Studio only): men get a male voice, women a female voice, found from the sound of the video -->
+<template id="tpl-autovoice">
+  <div class="field-row"><div class="txt"><b data-i18n="auto.title"></b><span data-i18n="auto.desc"></span></div><label class="switch"><input type="checkbox" data-bind="voice.auto.on"><i></i></label></div>
+  <div class="auto-opts" data-auto-opts>
+    <div class="auto-picks" style="margin-top:10px">
+      <div class="field"><label for="auto-male"><span class="gsym m" aria-hidden="true">♂</span> <span data-i18n="auto.male"></span></label><select class="select" id="auto-male" data-bind="voice.auto.male" data-auto-select="male"></select></div>
+      <div class="field"><label for="auto-female"><span class="gsym f" aria-hidden="true">♀</span> <span data-i18n="auto.female"></span></label><select class="select" id="auto-female" data-bind="voice.auto.female" data-auto-select="female"></select></div>
+    </div>
+    <div class="auto-consent hidden" data-auto-consent style="margin-top:12px">
+      <label class="check"><input type="checkbox" data-bind="voice.vox.consent"><span data-i18n="vox.consent"></span></label>
+      <span class="hint" style="margin:2px 0 0 28px" data-i18n="vox.consent.hint"></span>
+    </div>
+    <p class="hint" style="margin:6px 0 0" data-i18n="auto.hint"></p>
+  </div>
+</template>
+
+<template id="tpl-terms-opts">
+  <div class="field-row"><div class="txt"><b data-i18n="tr.keep"></b><span data-i18n="tr.keep.desc"></span></div><label class="switch"><input type="checkbox" data-bind="translate.keep_terms"><i></i></label></div>
+  <div class="field-row"><div class="txt"><b data-i18n="tr.auto"></b><span data-i18n="tr.auto.desc"></span></div><label class="switch"><input type="checkbox" data-bind="translate.auto_detect"><i></i></label></div>
+  <div data-edge-only>
+    <div class="field" style="padding-top:12px;border-top:1px solid var(--border)">
+      <label data-i18n="tr.pron"></label>
+      <div class="seg block" data-bind="voice.term_mode">
+        <button data-value="english_voice" data-i18n="tr.pron.en"></button>
+        <button data-value="khmer_voice" data-i18n="tr.pron.km"></button>
+      </div>
+      <span class="hint" style="margin:0" data-i18n="tr.pron.hint"></span>
+    </div>
+    <div class="field" style="margin-top:14px" data-envoice>
+      <label data-i18n="tr.envoice"></label>
+      <select class="select" data-bind="voice.en_voice" data-envoice-select></select>
+    </div>
+  </div>
+  <div class="notice info hidden" data-vox-only style="margin-top:12px"><i data-icon="info"></i><div class="n-body"><span data-i18n="vox.terms.note"></span></div></div>
+  <div style="margin-top:12px"><a href="#terms" class="btn btn-ghost btn-sm" data-goto="terms"><i data-icon="terms"></i><span data-i18n="tr.edit"></span></a></div>
+</template>
+
+<div id="toasts" aria-live="polite"></div>
+<script src="/static/js/i18n.js?v={{v}}"></script>
+<script src="/static/js/app.js?v={{v}}"></script>
+</body>
+</html>

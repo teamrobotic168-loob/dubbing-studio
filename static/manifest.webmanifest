@@ -1,0 +1,27 @@
+{
+  "id": "/",
+  "name": "V_Heang Studio",
+  "short_name": "V_Heang",
+  "description": "Dub videos into Khmer (English · 中文 · 한국어 → ខ្មែរ) and keep technical terms in English. Runs on your own computer.",
+  "lang": "km",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090d1a",
+  "theme_color": "#090d1a",
+  "categories": ["productivity", "utilities", "multimedia"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/static/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Dubbing Studio", "short_name": "Dubbing", "url": "/#dub", "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Text to Speech", "short_name": "TTS", "url": "/#tts", "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Technical Terms", "short_name": "Terms", "url": "/#terms", "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "History", "short_name": "History", "url": "/#history", "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}

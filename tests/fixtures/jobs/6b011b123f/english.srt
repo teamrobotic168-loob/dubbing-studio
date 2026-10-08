@@ -1,0 +1,47 @@
+1
+00:00:01,000 --> 00:00:06,097
+Welcome back to the channel. Today we are going to build a real-time analytics dashboard from scratch.
+
+2
+00:00:06,897 --> 00:00:12,839
+First, we will set up a Python server using FastAPI and connect it to a PostgreSQL database.
+
+3
+00:00:13,639 --> 00:00:18,354
+Then we will train a simple machine learning model with scikit-learn to predict customer behavior.
+
+4
+00:00:19,154 --> 00:00:24,349
+The front end is built with React and TypeScript, and it talks to the backend through a REST API.
+
+5
+00:00:25,149 --> 00:00:31,123
+Make sure you install Node.js and VS Code before we start, and create a new GitHub repository.
+
+6
+00:00:31,923 --> 00:00:39,370
+Let's begin by creating the database schema. We need a table for users, a table for events, and an index on the timestamp column.
+
+7
+00:00:40,170 --> 00:00:45,881
+Next, the API endpoint receives JSON data from the mobile app and stores it in the database.
+
+8
+00:00:46,681 --> 00:00:53,459
+Our startup grew by 40 percent last year, and the CEO wants a better KPI report for every stakeholder.
+
+9
+00:00:54,259 --> 00:00:59,656
+That is why this dashboard shows revenue, conversion rate, and the number of active users in real time.
+
+10
+00:01:00,456 --> 00:01:06,849
+We deploy everything with Docker on AWS, so the whole system scales automatically when traffic increases.
+
+11
+00:01:07,649 --> 00:01:11,753
+If you like this tutorial, please subscribe to the channel and share it with your friends.
+
+12
+00:01:12,553 --> 00:01:15,047
+Thank you for watching, and see you in the next video.

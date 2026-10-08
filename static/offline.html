@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="km">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d1a">
+  <title>V_Heang Studio · មិនទាន់ដំណើរការ · not running</title>
+  <!-- Shown by the service worker (static/sw.js) when the dashboard cannot be reached, i.e. the local server is not running.
+       Everything is inline on purpose: this page is kept by the browser and must work with the server switched off - the server puts the
+       Khmer font (static/fonts, 57 KB) into the CSS comment below when it sends this page (app/main.py, pwa_offline_page). -->
+  <style>
+    /*{{khmer-font}}*/
+    :root { color-scheme: dark light; --bg: #090d1a; --card: #111729; --line: rgba(255,255,255,.12); --text: #eaeefb; --text2: #adb7d3; --accent: #7c6cff; --accent2: #22d3ee; --ok: #34d399; }
+    @media (prefers-color-scheme: light) { :root { --bg: #f3f5fc; --card: #ffffff; --line: rgba(20,30,70,.14); --text: #141a33; --text2: #4a557a; } }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: grid; place-items: center; padding: 24px; background: var(--bg); color: var(--text);
+           font: 16px/1.7 "KDS Khmer", system-ui, -apple-system, "Segoe UI", "Khmer UI", "Leelawadee UI", "Noto Sans Khmer", "Khmer MN", sans-serif; }
+    main { width: min(560px, 100%); padding: 32px 28px; border-radius: 22px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 24px 60px -28px rgba(0,0,0,.6); }
+    .logo { width: 64px; height: 64px; display: block; margin-bottom: 18px; }
+    h1 { margin: 0 0 4px; font-size: 22px; line-height: 1.35; letter-spacing: -.2px; }
+    h1 small { display: block; font-size: 14px; font-weight: 600; color: var(--text2); }
+    p { margin: 14px 0 0; color: var(--text2); }
+    p b, p code { color: var(--text); font-weight: 650; }
+    p code { font: 600 14px ui-monospace, SFMono-Regular, Consolas, monospace; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--accent) 16%, transparent); }
+    .tips { margin: 18px 0 0; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); font-size: 14px; }
+    .tips p { margin: 0 0 8px; }
+    .tips p:last-child { margin: 0; }
+    .row { display: flex; align-items: center; gap: 14px; margin-top: 22px; flex-wrap: wrap; }
+    button { appearance: none; border: 0; cursor: pointer; padding: 11px 20px; border-radius: 12px; color: #fff; font-family: inherit; font-size: 15px; font-weight: 650; line-height: 1.3;
+             background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 10px 26px -10px rgba(124,108,255,.7); }
+    button:focus-visible { outline: 3px solid var(--accent2); outline-offset: 2px; }
+    #st { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; color: var(--text2); }
+    #st i { width: 11px; height: 11px; border-radius: 50%; background: #f59e0b; animation: pulse 1.4s ease-in-out infinite; }
+    #st[data-state="up"] i { background: var(--ok); animation: none; }
+    @keyframes pulse { 0%, 100% { opacity: .35; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.1); } }
+    @media (prefers-reduced-motion: reduce) { #st i { animation: none; } }
+  </style>
+</head>
+<body>
+<main>
+  <svg class="logo" viewBox="0 0 64 64" role="img" aria-label="V_Heang Studio">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c6cff"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+    <rect width="64" height="64" rx="16" fill="url(#g)"/>
+    <g stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"><path d="M16 28v8M24 20v24M32 14v36M40 22v20M48 28v8"/></g>
+  </svg>
+
+  <h1><span lang="km">V_Heang Studio មិនទាន់ដំណើរការទេ</span><small lang="en">V_Heang Studio is not running</small></h1>
+
+  <p lang="km">កម្មវិធីនេះរត់លើកុំព្យូទ័ររបស់អ្នក។ សូមបើក <code>start.bat</code> (Windows) ឬ <code>start.command</code> (Mac) រួចទំព័រនេះនឹងបើកកម្មវិធីដោយខ្លួនឯង។</p>
+  <p lang="en">This app runs on your own computer. Start it with <code>start.bat</code> (Windows) or <code>start.command</code> (Mac) - this page opens the app by itself as soon as it is ready.</p>
+
+  <div class="tips">
+    <p lang="km">កុំបិទផ្ទាំងខ្មៅ (terminal) ពេលកំពុងប្រើ — បិទវា គឺកម្មវិធីឈប់។</p>
+    <p lang="en">Keep the black window (terminal) open while you use it - closing it stops the app.</p>
+    <p lang="km">បើផ្ទាំងខ្មៅប្រាប់ថាប្រើ port ផ្សេង (ឧ. 8001) សូមបិទ V_Heang Studio ចាស់ជាមុន រួចបើកម្តងទៀត ឲ្យវាប្រើ port 8000។</p>
+    <p lang="en">If the black window says another port (e.g. 8001), close the old V_Heang Studio window first and start again, so that it uses port 8000.</p>
+  </div>
+
+  <div class="row">
+    <button id="retry" type="button"><span lang="km">ព្យាយាមម្តងទៀត</span> · <span lang="en">Try again</span></button>
+    <span id="st" data-state="down" role="status" aria-live="polite"><i aria-hidden="true"></i><span id="stt"><span lang="km">កំពុងរង់ចាំ server …</span> · <span lang="en">waiting for the server …</span></span></span>
+  </div>
+</main>
+<script>
+(function () {
+  // Opened by the service worker in place of the dashboard (the address is "/")?  Then go back to the dashboard as soon as the server answers.
+  // (Opened directly as /offline.html, e.g. to look at it: only show the state.)
+  var instead = location.pathname === '/';
+  var st = document.getElementById('st'), stt = document.getElementById('stt'), waiting = stt.innerHTML;
+  function check() {
+    fetch('/api/health', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('not ok')); })
+      .then(function (d) {
+        if (!d || d.ok !== true) throw new Error('not V_Heang Studio');
+        st.dataset.state = 'up';
+        stt.textContent = 'OK ✓';
+        if (instead) location.replace('/');
+      })
+      .catch(function () { st.dataset.state = 'down'; stt.innerHTML = waiting; });
+  }
+  document.getElementById('retry').addEventListener('click', function () { location.replace('/'); });
+  check();
+  setInterval(check, 2500);
+})();
+</script>
+</body>
+</html>

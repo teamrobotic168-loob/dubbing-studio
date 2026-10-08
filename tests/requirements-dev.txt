@@ -1,0 +1,11 @@
+# Packages that only the test-suites and tools need (the app itself needs ../requirements.txt).
+#
+#   pip install -r requirements.txt -r tests/requirements-dev.txt
+#   python -m playwright install chromium            # Linux: add  --with-deps  (system libraries for the browser)
+
+playwright>=1.45        # browser tests (Chromium) and shots.py
+pyflakes>=3.0           # static check of the Python code (run_all.sh does it first)
+shellcheck-py>=0.10     # test_platform: lints start.sh / start.command / install-voxcpm.sh / install-voxcpm.command
+
+# Optional: lets test_upload part D run a REAL Whisper on a short clip (first run downloads a ~150 MB model); without it part D is skipped.
+# faster-whisper>=1.0
